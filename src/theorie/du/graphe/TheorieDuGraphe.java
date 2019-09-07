@@ -1,0 +1,2332 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package theorie.du.graphe;
+
+import Dialogs.CreerJDialog;
+import Dialogs.Color_Dialogue;
+import Algorithmes.BellmanFord;
+import Algorithmes.FloydWarshall;
+import Algorithmes.Kruskal;
+import Algorithmes.DFS;
+import Algorithmes.Prim;
+import Algorithmes.FordFulkerson;
+import Algorithmes.BFS;
+import Algorithmes.Dijiktra;
+import Dialogs.A_Propos;
+import Dialogs.OuvrirJDialog;
+import Dialogs.SauvJDialog;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Vector;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.filechooser.FileSystemView;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.awt.AWTException;
+import java.awt.Cursor;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.File;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+
+
+/**
+ *
+ * @author MouadC
+ */
+public class TheorieDuGraphe extends javax.swing.JFrame {
+
+    /**
+     * Creates new form frame
+     */
+    
+    private Vector<Sommet> sommets;  //Gerer le nombre de sommets 
+    Vector voisins;  //Vector temporel ;Stocker le voisins de chaque sommet et son coût
+    HashMap<Integer,Vector> arretes; //Matrice de liaison entre les sommets
+    Vector<Sommet> Sommets_start_end; //Ce vecteur contient 2 sommets //Pour dessiner l'arc entre deux objet
+    Vector<Vector<Integer>> matrice;
+    Vector<Vector> ctrlZ;
+
+    private int V,E;    //Nombre de sommets
+    private boolean dessiner;//Jframe  // Est ce qu'on active le mode dessiner ou nn
+    private boolean isAlgorithme;
+    private boolean complet;
+    
+    private String details;
+    public static String[] algorithmes;
+    public final static String Application_PATH="C:\\Users\\Asus\\Documents\\NetBeansProjects\\Chaouki Mouad - Theorie des graphes LS1\\Theorie du graphe1.47 ( final) - Final";
+    public  static String PDF_RAPPORT, NOM_PROJET="",PATH="";
+            
+    private Pan pan;
+
+     //
+    public void combobox() {
+          ComboBox.setSelectedIndex(1);
+          ComboBox.addActionListener((ActionListener) this);
+          add(ComboBox);
+        }
+    public TheorieDuGraphe() {
+        initComponents();        
+
+        
+        this.setSize(1370, 740);
+        this.setLocationRelativeTo(null);
+
+        sommets=new Vector<>();     // contient les sommets
+        voisins=new Vector<>();       //ce vecteur remplace le vecteur voisins de chaque sommet  //Contient 2 champs Sommet et leur côut 
+        arretes=new HashMap<Integer,Vector>();
+        Sommets_start_end=new Vector();   //Contient 2 sommets lors de dessin on commence par le 1ere et on enregistre sommet destination
+        matrice=new Vector<Vector<Integer>>();
+        ctrlZ=new Vector<Vector>();
+        
+        Sommet.COUT_NAME="";
+        
+        pan=new Pan(this);
+        
+//        this.pan=(Panneau) graphPanel;
+//        this.graphPanel=(Pan)pan ;
+
+        
+        ButtonGroup group = new ButtonGroup();
+        group.add(oriented);
+        group.add(nonoriented);
+        oriented.setSelected(true);
+        
+        ButtonGroup group2 = new ButtonGroup();
+        group2.add(weighted);
+        group2.add(nonweighted);
+        nonweighted.setSelected(true);
+        
+        details=new String("");
+        E=0;
+        V=0;
+        nbrV.setText("0");
+        dessiner=false;
+        this.setLocationRelativeTo(null);
+        
+        
+//        ComboBox.removeAllItems();
+        algorithmes=new String []{"Choisir votre algorithme : ","Prim","Kruskal","Floyd–Warshall","BFS","DFS","Dijikstra"
+                                    ,"Bellman–Ford","Ford–Fulkerson"};        
+        for (String typ : algorithmes) {
+            ComboBox.addItem(typ);
+        }
+        nonoriented.setSelected(true);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jDialog1 = new javax.swing.JDialog();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        dialog = new javax.swing.JDialog();
+        jColorChooser3 = new javax.swing.JColorChooser();
+        jColorChooser1 = new javax.swing.JColorChooser();
+        jColorChooser2 = new javax.swing.JColorChooser();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        Panel = new javax.swing.JPanel();
+        Tabs_Panel = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        nbrE = new javax.swing.JLabel();
+        nbrV = new javax.swing.JTextField();
+        jButtonCreerGraph = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        Matrice = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        ComboBox = new javax.swing.JComboBox<>();
+        DetailsPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Details = new javax.swing.JTextPane();
+        Vider_details = new javax.swing.JButton();
+        TabsPanel = new javax.swing.JPanel();
+        RapportGraphPanel = new javax.swing.JPanel();
+        taille = new javax.swing.JLabel();
+        ordre = new javax.swing.JLabel();
+        type = new javax.swing.JLabel();
+        diametre = new javax.swing.JLabel();
+        densite = new javax.swing.JLabel();
+        densiteProgress = new javax.swing.JProgressBar();
+        typeGraphe = new javax.swing.JLabel();
+        densiteCompleted = new javax.swing.JLabel();
+        ExportPDF = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        matAdjPanel = new javax.swing.JPanel();
+        graphPanel = new Pan(this);
+        Lab1 = new javax.swing.JLabel();
+        Lab2 = new javax.swing.JLabel();
+        Lab3 = new javax.swing.JLabel();
+        Lab4 = new javax.swing.JLabel();
+        Lab5 = new javax.swing.JLabel();
+        Lab6 = new javax.swing.JLabel();
+        Lab7 = new javax.swing.JLabel();
+        Lab11 = new javax.swing.JLabel();
+        Lab8 = new javax.swing.JLabel();
+        Lab9 = new javax.swing.JLabel();
+        Lab10 = new javax.swing.JLabel();
+        Lab12 = new javax.swing.JLabel();
+        Lab14 = new javax.swing.JLabel();
+        Lab13 = new javax.swing.JLabel();
+        navPanel = new javax.swing.JPanel();
+        dragButton = new javax.swing.JToggleButton();
+        resetButton = new javax.swing.JButton();
+        oriented = new javax.swing.JRadioButton();
+        nonoriented = new javax.swing.JRadioButton();
+        sommetWITDH = new javax.swing.JSlider();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        colorButton = new javax.swing.JButton();
+        pictButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        PROJET_TITRE = new javax.swing.JLabel();
+        BackButton = new javax.swing.JButton();
+        weighted = new javax.swing.JRadioButton();
+        nonweighted = new javax.swing.JRadioButton();
+        jSeparator3 = new javax.swing.JSeparator();
+        AddCoutButton = new javax.swing.JButton();
+        jMenuBar = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout dialogLayout = new javax.swing.GroupLayout(dialog.getContentPane());
+        dialog.getContentPane().setLayout(dialogLayout);
+        dialogLayout.setHorizontalGroup(
+            dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jColorChooser3, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        dialogLayout.setVerticalGroup(
+            dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jColorChooser3, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jLabel4.setText("jLabel4");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jMenuItem7.setText("jMenuItem7");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Theorie des graphes - Application");
+        setBackground(new java.awt.Color(51, 51, 51));
+        setForeground(new java.awt.Color(51, 51, 51));
+        setResizable(false);
+        setShape(getMaximizedBounds());
+
+        Panel.setBackground(new java.awt.Color(102, 102, 102));
+        Panel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(0, 0, 0), new java.awt.Color(0, 0, 0), new java.awt.Color(0, 0, 0), new java.awt.Color(0, 0, 0)));
+        Panel.setName("Theorie des graphes - Application"); // NOI18N
+        Panel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                PanelKeyPressed(evt);
+            }
+        });
+
+        Tabs_Panel.setMaximumSize(new java.awt.Dimension(472, 472));
+
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel1.setMaximumSize(new java.awt.Dimension(467, 556));
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel1MousePressed(evt);
+            }
+        });
+
+        jLabel1.setText("| V | :");
+
+        jLabel2.setText("( Taper Entrer lorsque vous terminez ! )");
+
+        nbrE.setText("| E |  =   0");
+
+        nbrV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nbrVActionPerformed(evt);
+            }
+        });
+
+        jButtonCreerGraph.setText("Créer le graphe");
+        jButtonCreerGraph.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCreerGraphActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Microsoft New Tai Lue", 1, 16)); // NOI18N
+        jLabel8.setText("Creer votre graphe ");
+
+        jScrollPane3.setBorder(null);
+        jScrollPane3.setMaximumSize(new java.awt.Dimension(400, 426));
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(400, 426));
+
+        Matrice.setBackground(new java.awt.Color(204, 204, 204));
+        Matrice.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Matrice :", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        Matrice.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Matrice.setMaximumSize(new java.awt.Dimension(500   , 500));
+
+        javax.swing.GroupLayout MatriceLayout = new javax.swing.GroupLayout(Matrice);
+        Matrice.setLayout(MatriceLayout);
+        MatriceLayout.setHorizontalGroup(
+            MatriceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        MatriceLayout.setVerticalGroup(
+            MatriceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 479, Short.MAX_VALUE)
+        );
+
+        jScrollPane3.setViewportView(Matrice);
+
+        jButton1.setText("Créer un graphe complet !");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(3, 3, 3)
+                        .addComponent(nbrV, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(nbrE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(31, 31, 31))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                        .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonCreerGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nbrV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(nbrE, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonCreerGraph)
+                    .addComponent(jButton1))
+                .addGap(5, 5, 5))
+        );
+
+        Tabs_Panel.addTab("Création de graphe", jPanel1);
+
+        jLabel9.setFont(new java.awt.Font("Microsoft New Tai Lue", 1, 16)); // NOI18N
+        jLabel9.setText("Appliquer un Algorithme :");
+
+        ComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxActionPerformed(evt);
+            }
+        });
+
+        DetailsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("MV Boli", 2, 18), new java.awt.Color(0, 51, 51))); // NOI18N
+
+        Details.setEditable(false);
+        jScrollPane1.setViewportView(Details);
+
+        Vider_details.setText("Vider details");
+        Vider_details.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Vider_detailsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout DetailsPanelLayout = new javax.swing.GroupLayout(DetailsPanel);
+        DetailsPanel.setLayout(DetailsPanelLayout);
+        DetailsPanelLayout.setHorizontalGroup(
+            DetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DetailsPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(DetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Vider_details, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
+        DetailsPanelLayout.setVerticalGroup(
+            DetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DetailsPanelLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Vider_details)
+                .addGap(0, 0, 0))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(DetailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(DetailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        Tabs_Panel.addTab("Application des algorithmes", jPanel2);
+
+        RapportGraphPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.lightGray, java.awt.Color.lightGray, java.awt.Color.lightGray, java.awt.Color.lightGray), "Rapport du graphe", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe Print", 2, 14))); // NOI18N
+
+        taille.setText("Taille du graphe : | V | = ");
+
+        ordre.setText("Ordre du graphe : | E | = ");
+
+        type.setText("Le type du graphe :");
+
+        diametre.setText("Diamètre :");
+
+        densite.setText("La densité : ");
+
+        ExportPDF.setText("Exporter PDF");
+        ExportPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExportPDFActionPerformed(evt);
+            }
+        });
+
+        jScrollPane4.setBorder(null);
+
+        matAdjPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(204, 204, 204), 2, true), "La matrice d'adjascence :"));
+
+        javax.swing.GroupLayout matAdjPanelLayout = new javax.swing.GroupLayout(matAdjPanel);
+        matAdjPanel.setLayout(matAdjPanelLayout);
+        matAdjPanelLayout.setHorizontalGroup(
+            matAdjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        matAdjPanelLayout.setVerticalGroup(
+            matAdjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 249, Short.MAX_VALUE)
+        );
+
+        jScrollPane4.setViewportView(matAdjPanel);
+
+        javax.swing.GroupLayout RapportGraphPanelLayout = new javax.swing.GroupLayout(RapportGraphPanel);
+        RapportGraphPanel.setLayout(RapportGraphPanelLayout);
+        RapportGraphPanelLayout.setHorizontalGroup(
+            RapportGraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(RapportGraphPanelLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(RapportGraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ordre)
+                    .addComponent(taille)
+                    .addGroup(RapportGraphPanelLayout.createSequentialGroup()
+                        .addComponent(type)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(typeGraphe))
+                    .addComponent(diametre)
+                    .addGroup(RapportGraphPanelLayout.createSequentialGroup()
+                        .addComponent(densite)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(densiteProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(densiteCompleted, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(24, Short.MAX_VALUE))
+            .addGroup(RapportGraphPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RapportGraphPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ExportPDF)
+                .addGap(70, 70, 70))
+        );
+        RapportGraphPanelLayout.setVerticalGroup(
+            RapportGraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(RapportGraphPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(taille)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ordre)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(RapportGraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(type)
+                    .addComponent(typeGraphe))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(diametre, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(RapportGraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(densite)
+                    .addComponent(densiteProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(densiteCompleted, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ExportPDF)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout TabsPanelLayout = new javax.swing.GroupLayout(TabsPanel);
+        TabsPanel.setLayout(TabsPanelLayout);
+        TabsPanelLayout.setHorizontalGroup(
+            TabsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(RapportGraphPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        TabsPanelLayout.setVerticalGroup(
+            TabsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(RapportGraphPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(103, Short.MAX_VALUE))
+        );
+
+        Tabs_Panel.addTab("Rapport du graphe", TabsPanel);
+
+        graphPanel.setBackground(new java.awt.Color(153, 153, 153));
+        graphPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.black, java.awt.Color.black, java.awt.Color.black, java.awt.Color.black));
+        graphPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        graphPanel.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                graphPanelComponentAdded(evt);
+            }
+        });
+        graphPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                graphPanelMouseDragged(evt);
+            }
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                graphPanelMouseMoved(evt);
+            }
+        });
+        graphPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                graphPanelMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                graphPanelMousePressed(evt);
+            }
+        });
+        graphPanel.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                graphPanelPropertyChange(evt);
+            }
+        });
+        graphPanel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                graphPanelKeyPressed(evt);
+            }
+        });
+
+        Lab1.setFont(new java.awt.Font("Lucida Console", 3, 18)); // NOI18N
+        Lab1.setForeground(new java.awt.Color(0, 0, 0));
+        Lab1.setText("Theorie des graphes - Application");
+
+        Lab2.setFont(new java.awt.Font("Dialog", 3, 14)); // NOI18N
+        Lab2.setForeground(new java.awt.Color(0, 0, 0));
+        Lab2.setText("=> Vous pouvez créer et manipuler votre graphe par 2 méthodes :");
+
+        Lab3.setForeground(new java.awt.Color(51, 51, 51));
+        Lab3.setText("I. En utilisant l'interface ' Création de graphe ', puis saisir le nombre de ");
+
+        Lab4.setForeground(new java.awt.Color(51, 51, 51));
+        Lab4.setText("          sommets souhaités. ");
+
+        Lab5.setForeground(new java.awt.Color(51, 51, 51));
+        Lab5.setText("   Finalement entrer le côut de chaque sommet. Puis cliquer sur ' Creer le graphe '");
+
+        Lab6.setForeground(new java.awt.Color(51, 51, 51));
+        Lab6.setText("II . Ou bien utiliser la magie du souris. C'est à dire, le contact direct avec l'interface graphique :");
+
+        Lab7.setForeground(new java.awt.Color(51, 51, 51));
+        Lab7.setText("          -> Creer des sommets par une clique . ");
+
+        Lab11.setFont(new java.awt.Font("Dialog", 3, 14)); // NOI18N
+        Lab11.setForeground(new java.awt.Color(0, 0, 0));
+        Lab11.setText("Remarque : ");
+
+        Lab8.setForeground(new java.awt.Color(51, 51, 51));
+        Lab8.setText("          -> Passer au mode DEPLACER pour : - Déplacer un sommet en appuyant sur ce dernier puis le déplacer. ");
+
+        Lab9.setForeground(new java.awt.Color(51, 51, 51));
+        Lab9.setText("          -> Passer au mode DESSIN pour : - Etablir des relations entre les sommets . ");
+
+        Lab10.setForeground(new java.awt.Color(51, 51, 51));
+        Lab10.setText("- Supprimer un sommet en cliquant sur ce dernier . ");
+
+        Lab12.setForeground(new java.awt.Color(51, 51, 51));
+        Lab12.setText("Ce qui est important. C'est on aura toujours le changement d'etats et  synchronisation");
+
+        Lab14.setForeground(new java.awt.Color(51, 51, 51));
+        Lab14.setText("     dans les deux côtés ^_^ ;)");
+
+        Lab13.setForeground(new java.awt.Color(51, 51, 51));
+        Lab13.setText("- Nommer un sommet en cliquant sur ce dernier puis saisir un nom . ");
+
+        javax.swing.GroupLayout graphPanelLayout = new javax.swing.GroupLayout(graphPanel);
+        graphPanel.setLayout(graphPanelLayout);
+        graphPanelLayout.setHorizontalGroup(
+            graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(graphPanelLayout.createSequentialGroup()
+                .addGroup(graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(graphPanelLayout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addGroup(graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Lab4)
+                            .addComponent(Lab3)
+                            .addComponent(Lab5)
+                            .addComponent(Lab6)
+                            .addComponent(Lab7)
+                            .addComponent(Lab8)
+                            .addGroup(graphPanelLayout.createSequentialGroup()
+                                .addGap(211, 211, 211)
+                                .addComponent(Lab10))
+                            .addComponent(Lab9)))
+                    .addGroup(graphPanelLayout.createSequentialGroup()
+                        .addGap(138, 138, 138)
+                        .addGroup(graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Lab11)
+                            .addGroup(graphPanelLayout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Lab12)
+                                    .addComponent(Lab14)))
+                            .addComponent(Lab2)))
+                    .addGroup(graphPanelLayout.createSequentialGroup()
+                        .addGap(190, 190, 190)
+                        .addComponent(Lab1)))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, graphPanelLayout.createSequentialGroup()
+                .addComponent(Lab13)
+                .addGap(169, 169, 169))
+        );
+        graphPanelLayout.setVerticalGroup(
+            graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(graphPanelLayout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addComponent(Lab1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(Lab2)
+                .addGap(18, 18, 18)
+                .addComponent(Lab3)
+                .addGap(0, 0, 0)
+                .addComponent(Lab4)
+                .addGap(0, 0, 0)
+                .addComponent(Lab5, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(Lab6)
+                .addGap(0, 0, 0)
+                .addComponent(Lab7)
+                .addGap(0, 0, 0)
+                .addComponent(Lab8)
+                .addGap(0, 0, 0)
+                .addComponent(Lab10)
+                .addGroup(graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(graphPanelLayout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(Lab11, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Lab12, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Lab14, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(graphPanelLayout.createSequentialGroup()
+                        .addComponent(Lab9)
+                        .addGap(0, 0, 0)
+                        .addComponent(Lab13)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        dragButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/drag.png"))); // NOI18N
+        dragButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                dragButtonMouseEntered(evt);
+            }
+        });
+        dragButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dragButtonActionPerformed(evt);
+            }
+        });
+
+        resetButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/reset.png"))); // NOI18N
+        resetButton.setDoubleBuffered(true);
+        resetButton.setFocusCycleRoot(true);
+        resetButton.setFocusTraversalPolicyProvider(true);
+        resetButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                resetButtonMouseEntered(evt);
+            }
+        });
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
+            }
+        });
+
+        oriented.setText("Orientée");
+        oriented.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                orientedActionPerformed(evt);
+            }
+        });
+
+        nonoriented.setText("Non-Orientée");
+        nonoriented.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nonorientedActionPerformed(evt);
+            }
+        });
+
+        sommetWITDH.setMajorTickSpacing(5);
+        sommetWITDH.setMaximum(35);
+        sommetWITDH.setMinimum(20);
+        sommetWITDH.setMinorTickSpacing(5);
+        sommetWITDH.setPaintTicks(true);
+        sommetWITDH.setValue(30);
+        sommetWITDH.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sommetWITDHStateChanged(evt);
+            }
+        });
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jLabel3.setText("Largeur des sommets :");
+
+        colorButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/color.png"))); // NOI18N
+        colorButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                colorButtonMouseEntered(evt);
+            }
+        });
+        colorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorButtonActionPerformed(evt);
+            }
+        });
+
+        pictButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/upload.png"))); // NOI18N
+        pictButton.setBorderPainted(false);
+        pictButton.setMaximumSize(new java.awt.Dimension(69, 30));
+        pictButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pictButtonMouseEntered(evt);
+            }
+        });
+        pictButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pictButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Microsoft JhengHei", 3, 11)); // NOI18N
+        jLabel5.setText("Nom Projet :");
+
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        PROJET_TITRE.setFont(new java.awt.Font("Microsoft JhengHei", 3, 11)); // NOI18N
+        PROJET_TITRE.setForeground(new java.awt.Color(255, 0, 0));
+        PROJET_TITRE.setText("Aucune !");
+
+        BackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
+        BackButton.setDoubleBuffered(true);
+        BackButton.setFocusCycleRoot(true);
+        BackButton.setFocusTraversalPolicyProvider(true);
+        BackButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                BackButtonMouseEntered(evt);
+            }
+        });
+        BackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackButtonActionPerformed(evt);
+            }
+        });
+        BackButton.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BackButtonKeyTyped(evt);
+            }
+        });
+
+        weighted.setText("Pondérer");
+        weighted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                weightedActionPerformed(evt);
+            }
+        });
+
+        nonweighted.setText("Non-Pondérer");
+        nonweighted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nonweightedActionPerformed(evt);
+            }
+        });
+
+        jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        AddCoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/addCoutName.png"))); // NOI18N
+        AddCoutButton.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                AddCoutButtonFocusGained(evt);
+            }
+        });
+        AddCoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                AddCoutButtonMouseEntered(evt);
+            }
+        });
+        AddCoutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddCoutButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout navPanelLayout = new javax.swing.GroupLayout(navPanel);
+        navPanel.setLayout(navPanelLayout);
+        navPanelLayout.setHorizontalGroup(
+            navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(navPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(oriented)
+                    .addComponent(nonoriented))
+                .addGap(12, 12, 12)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(weighted)
+                    .addComponent(nonweighted))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PROJET_TITRE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(AddCoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(BackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(dragButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(colorButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(pictButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(sommetWITDH, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5))
+        );
+        navPanelLayout.setVerticalGroup(
+            navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(navPanelLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(pictButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(navPanelLayout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(navPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(PROJET_TITRE, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jSeparator2)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, navPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(0, 0, 0)
+                                .addComponent(sommetWITDH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSeparator1)
+                            .addComponent(dragButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(colorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(resetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(navPanelLayout.createSequentialGroup()
+                                .addComponent(weighted)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nonweighted))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, navPanelLayout.createSequentialGroup()
+                                .addComponent(oriented)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nonoriented))
+                            .addComponent(jSeparator3)))
+                    .addComponent(AddCoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+
+        javax.swing.GroupLayout PanelLayout = new javax.swing.GroupLayout(Panel);
+        Panel.setLayout(PanelLayout);
+        PanelLayout.setHorizontalGroup(
+            PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Tabs_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(navPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(graphPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        PanelLayout.setVerticalGroup(
+            PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Tabs_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(PanelLayout.createSequentialGroup()
+                        .addComponent(navPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(graphPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+
+        jScrollPane2.setViewportView(Panel);
+
+        jMenu1.setText("File");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Creer Projet");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Sauvegarder");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem3.setText("Ouvrir");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem4.setText("Sortir");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
+        jMenuBar.add(jMenu1);
+
+        jMenu3.setText("Edit");
+
+        jMenuItem8.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem8.setText("Annuler ");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem8);
+
+        jMenuBar.add(jMenu3);
+
+        jMenu2.setText("Plus d'information");
+
+        jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem6.setText("Aide");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
+        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem5.setText("A propos");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuBar.add(jMenu2);
+
+        setJMenuBar(jMenuBar);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2)
+                .addGap(0, 0, 0))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+
+    private void nbrVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nbrVActionPerformed
+        // TODO add your handling code here:
+        this.V=(Integer.parseInt(nbrV.getText()));
+        sommets.clear();  
+        matrice.clear();
+        arretes.clear();
+        this.drawMatrix(V+1);
+//        addToCtrZ();
+//        System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzz"+ctrlZ.size());
+        
+    }//GEN-LAST:event_nbrVActionPerformed
+    
+    public void drawMatrix(int rows) {
+        InitialiserSommets(rows);
+        RemplirMatrix(rows);      
+        
+    }
+    
+    public void InitialiserSommets(int rows){
+        int k=graphPanel.getWidth()/2+25,p=50,s=1,c=50;
+        for(int i=0;i<rows;i++){
+            if(i<rows-1)    //Positionner les sommets----------
+            {
+                sommets.add(new Sommet(i+1,this));
+                sommets.get(i).setPosition(k, p);
+                if(i<rows/2)
+                    c+=40;
+                else
+                    c-=40;
+                s*=-1;
+                k=(int)k+c*s;
+                if(s>0)
+                p=(int)p+25;
+                
+            } 
+        }
+    }
+    
+    private void addGraphInformation(){
+            graphPanel.add(Lab1);
+            graphPanel.add(Lab2);
+            graphPanel.add(Lab3);
+            graphPanel.add(Lab4);
+            graphPanel.add(Lab5);
+            graphPanel.add(Lab6);
+            graphPanel.add(Lab7);
+            graphPanel.add(Lab8);
+            graphPanel.add(Lab9);
+            graphPanel.add(Lab10);
+            graphPanel.add(Lab11);
+            graphPanel.add(Lab12);
+            graphPanel.add(Lab13);
+            graphPanel.add(Lab14);
+    }
+    
+    public void RemplirMatrix(int rows){
+        
+        addGraphInformation();
+        
+        
+        E=0;
+//        labelsVert.clear();
+//        labelsHoriz.clear();
+        this.Matrice.removeAll();
+        this.Matrice.setLayout(new GridLayout(rows, rows));
+        for(int i=0;i<rows;i++){            
+            if(i==0)
+              arretes.put(0, null);  //Pour eviter le calcule d'indce 0                
+            else  
+              arretes.put(i, new Vector());  //Mise a jour les voisins de sommet d'indice i
+            
+            for(int j=0;j<rows;j++){   
+                if(i==0 && j==0)
+                    this.Matrice.add(new JLabel(" "+"  \\"+" "));
+                else if(i==0 && j!=0){
+                    if(sommets.get(j-1).getName().length()>0){
+                    this.Matrice.add(new JLabel(""+j+": "+sommets.get(j-1).getName())); 
+                    }else
+                        this.Matrice.add(new JLabel("  "+j+" "));
+                }else if(j==0){
+                    if(sommets.get(i-1).getName().length()>0){
+                    this.Matrice.add(new JLabel("  "+i+": "+sommets.get(i-1).getName())); 
+                    }else
+                        this.Matrice.add(new JLabel("  "+i+" ")); 
+                }else if(i!=0 && j!=0)
+                {
+                    int cout = 0;   //Le cout par defaut s'il n'existe aucune arc
+                        if(complet)
+                            cout = 1;
+                        else{
+                            for(int p=0;p<sommets.get(i-1).voisins.size();p++){
+                                if((j)==((Sommet)sommets.get(i-1).voisins.get(p).get(0)).getIndice() )   
+                                {                 //S'il existe un arc avec l'indice j   //on le saisir dans la matrice
+                                    cout=(int) sommets.get(i-1).voisins.get(p).get(1);  //Sinon il reste cout=0
+//                                        nombreSommets+=1;
+                                    break;
+                                }
+                            }
+                        }
+                    if(i==j) cout=0;
+                    arretes.get(i).add(new JTextField(""+cout));
+                    this.Matrice.add( (JTextField) arretes.get(i).get(j-1) );
+                    if(nonoriented.isSelected() && cout != 0)
+                         {  if(j>i) E++;    }
+                    if(oriented.isSelected() && cout != 0) E++;                }
+            }
+        }
+//        getMatrice();
+//          graphPanel.repaint();
+//          paint(this.getGraphics()); //Pour appliquer les modifications  
+          repaint();
+          makeRapport();
+    }
+    
+    public void makeRapport(){
+                
+        PDF_RAPPORT="";
+        
+        taille.setText("\n\t\tLa taille du graphe : | V | = "+this.V);
+            PDF_RAPPORT+=taille.getText().toString();
+        ordre.setText("L'ordre du graphe : | E | = "+E);
+            PDF_RAPPORT+="\n\t\t"+ordre.getText().toString();
+        //---------Orientation-----------------------------------
+        if(isOriented()&& V!=0){
+            typeGraphe.setText("Orienté");
+        }else if(!isOriented()&& V!=0){
+            typeGraphe.setText("NON-Orienté");
+        }else
+            typeGraphe.setText("");
+        
+        PDF_RAPPORT+="\n\t\tType du graphe : "+typeGraphe.getText().toString();
+        //---------------------Diamètre------------------------
+        if(getMatrice()!=null){
+            int[][] tempMat=getMatrice();
+            ArrayList is = new ArrayList();
+            for (int i = 0; i < tempMat.length; i++) {
+                for (int j = 0; j < tempMat.length; j++) {
+                    is.add(tempMat[i][j]); 
+                }
+            }
+            System.out.println(""+is);
+            is.sort(new Comparator() {
+                @Override
+                public int compare(Object o1, Object o2) {
+                    if( (int)o1 >= (int)o2)
+                        return -1;
+                    else if( (int)o1 <= (int)o2)
+                        return 1;
+                    else return 0;
+                }
+            });
+            System.out.println(""+is);
+            if(is.size()!=0)
+                diametre.setText("Diamètre = "+is.get(0));
+        }else{
+            diametre.setText("Diamètre = ");
+        }
+        
+        PDF_RAPPORT+="\n\t\t"+diametre.getText().toString();
+        //----------------Densite-------------------------
+        if(isOriented() && V!=0){
+            densite.setText("La densité : "+(int) (((float) (E)/(V*(V-1)))*100)+"% ");
+            densiteProgress.setValue((int) (((float) (E)/(V*(V-1)))*100) );
+        }else if(!isOriented() && V!=0){
+            densite.setText("La densité : "+(int) (((float) (2*E)/(V*(V-1)))*100)+"% ");
+            densiteProgress.setValue((int) (((float) (2*E)/(V*(V-1)))*100) );
+        }
+        if(densiteProgress.getValue()==100) 
+            this.densiteCompleted.setText("Graphe complet !!");
+        else
+            this.densiteCompleted.setText("");
+        
+        PDF_RAPPORT+="\n\t\t"+densite.getText().toString();
+        //----------------Affichage du matrice-----------------
+//        matAdjAffichage.setText(""+getMatriceString());
+        matAdjPanel.removeAll();
+        matAdjPanel.setLayout(new GridLayout(V+1, V+1));
+        if(getMatrice()!=null){
+            int[][]mat=getMatrice();
+            for (int i = 0; i < V+1; i++) {
+                for (int j = 0; j < V+1; j++) {
+                    if(i==0 && j==0)
+                    {
+                        JLabel lab=new JLabel(" "+"  \\"+" ");
+                        lab.setFont(new Font("italic", 1, 11));
+                        this.matAdjPanel.add(lab);
+                    }
+                    else if(i==0 && j!=0)
+                    {
+                        JLabel lab=new JLabel("  "+j+" ");
+                        lab.setFont(new Font("italic", 1, 11));
+                        this.matAdjPanel.add(lab);
+                    }
+                    else if(j==0)
+                    {
+                        JLabel lab=new JLabel("  "+i+" ");
+                        lab.setFont(new Font("italic", 1, 11));
+                        this.matAdjPanel.add(lab);
+                    } 
+                    else if(i!=0 && j!=0)
+                    {
+                        JLabel lab=new JLabel("  "+mat[i-1][j-1]);
+                        lab.setFont(new Font("bold", 1, 10));
+                        lab.setForeground(Color.blue);
+                        this.matAdjPanel.add(lab);
+                    }
+                }
+            }
+        }
+        PDF_RAPPORT+="\n\t\tLa matrice d'adjascence :\n"+getMatriceString(); 
+//        try {
+//            addToCtrZ();
+//        } catch (CloneNotSupportedException ex) {
+//            Logger.getLogger(TheorieDuGraphe.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
+    }
+    
+    public int[][] getMatrice(){
+        int[][] matrice=new int[V][V];
+        for(int i=0;i<V;i++){
+            for(int j=0;j<V;j++){
+                matrice[i][j]=Integer.parseInt( ( (JTextField) arretes.get(i+1).get(j) ).getText());
+            }
+            System.out.print("\n");
+        }
+        return matrice;
+    }
+    
+    public String getMatriceString(){
+        String mat="";
+        int[][] matrice=new int[V][V];
+        for(int i=0;i<V;i++){
+            for(int j=0;j<V;j++){
+                matrice[i][j]=Integer.parseInt( ( (JTextField) arretes.get(i+1).get(j) ).getText());
+                mat+=""+matrice[i][j]+" | ";
+            }
+            System.out.print("\n");
+            mat+="\n";
+        }
+        return mat;
+    }
+
+    @Override
+    public void paintComponents(Graphics g) {
+        super.paintComponents(g); //To change body of generated methods, choose Tools | Templates.
+        this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+//        Panel.setSize(this.getSize());
+//        Tabs_Panel.setSize(472,navPanel.getHeight()+graphPanel.getHeight());
+//        jPanel1.setSize(472,navPanel.getHeight()+graphPanel.getHeight());
+         //To change body of generated methods, choose Tools | Templates.
+        Matrice.validate();    //refrecher Panel Matrice pour afficher les donner du matrice
+        makeRapport();
+        drawPanel();         //Dessiner les sommets
+    }
+    
+    
+    
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+//        if(10>V){
+            
+//        }else if(10<=V && V<14){
+//            this.setSize(1200, 700);
+//            this.setLocationRelativeTo(null);
+//        }else if(V>=14){
+//            this.setSize(1200, 730);
+//            this.setLocation(100, 0);
+//        }
+    }
+    
+    public void drawPanel(){  //Pour redissiner toutes les sommets 
+        graphPanel.repaint();
+    }
+    
+    private void jButtonCreerGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreerGraphActionPerformed
+        // TODO add your handling code here:
+        E=0;
+        if(Integer.parseInt(nbrV.getText().toString())>0){
+            for(int i=0;i<V;i++){
+                sommets.get(i).voisins.clear();   //Vider les voisins de chaque sommet pour les re-utiliser
+            }
+
+            if(!isOriented()){
+
+                for(int i=1;i<V+1;i++){
+                    for(int j=0;j<V;j++){
+                         if( Integer.parseInt( ( (JTextField) arretes.get(i).get(j) ).getText())== 0  )
+                             ((JTextField) arretes.get(j+1).get(i-1) ).setText("0");
+                         else if(j>i-1) {
+                           voisins.clear();
+                    //Ajouter le voisin de sommet d'indice i-1 (car on commence par 0) et aussi son cout
+                           voisins.add( sommets.get(j) );    
+                           voisins.add(Integer.parseInt( ( (JTextField) arretes.get(i).get(j) ).getText()));
+                           
+                           if( sommets.get(j).getIndice()!=sommets.get(i-1).getIndice()){
+                                sommets.get(i-1).voisins.add(new Vector(voisins));   //Puis les insérer dans le sommet
+
+                                voisins.clear();
+                                voisins.add(sommets.get(i-1));
+                                voisins.add(Integer.parseInt( ( (JTextField) arretes.get(i).get(j) ).getText()));
+                                ((JTextField) arretes.get(j+1).get(i-1) ).setText(""+Integer.parseInt( ( (JTextField) arretes.get(i).get(j) ).getText()));
+                                sommets.get(j).voisins.add(new Vector(voisins)); 
+                                E++;
+                           }else
+                               ( (JTextField) arretes.get(i).get(j) ).setText("0");
+                         }
+                    }
+                }
+            }else{
+                for(int i=1;i<V+1;i++){
+                for(int j=0;j<V;j++){
+                     if( Integer.parseInt( ( (JTextField) arretes.get(i).get(j) ).getText())== 0  )
+                         System.out.print("");
+                     else {
+                       voisins.clear();
+                //Ajouter le voisin de sommet d'indice i-1 (car on commence par 0) et aussi son cout
+                       voisins.add( sommets.get(j) );    
+                       voisins.add(Integer.parseInt( ( (JTextField) arretes.get(i).get(j) ).getText()));
+                       if(sommets.get(j).getIndice() != sommets.get(i-1).getIndice()){
+                            sommets.get(i-1).voisins.add(new Vector(voisins));   //Puis les insérer dans le sommet
+                            E++;
+                       }else{
+                           ((JTextField) arretes.get(i).get(j)).setText("0");
+                       }
+                     }
+                }
+            }
+            }
+
+            int[][] mat=getMatrice();
+            for(int i=0;i<V;i++){
+                for(int j=0;j<V;j++){
+                    System.out.print("| "+mat[i][j]);
+                }
+                System.out.print("\n");
+            }
+                System.out.println("-------------");
+            drawPanel();
+        }else{
+            JOptionPane jop1 = new JOptionPane();
+            jop1.showMessageDialog(null, "Il faut donner le nombre de sommets V !", "Error", JOptionPane.UNDEFINED_CONDITION);
+        }
+        makeRapport();
+        repaint();
+//        try {
+//            addToCtrZ();
+//        } catch (CloneNotSupportedException ex) {
+//            Logger.getLogger(TheorieDuGraphe.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzz");
+    }//GEN-LAST:event_jButtonCreerGraphActionPerformed
+         
+    
+    private void dragButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dragButtonActionPerformed
+        // TODO add your handling code here:
+        if(dragButton.isSelected())
+        {
+//            jToggleDessiner.setBackground(Color.BLUE);
+            dragButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/paint.png"))); // NOI18N
+            graphPanel.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+            dessiner=true;
+        }else{
+//            jToggleDessiner.setBackground(Color.LIGHT_GRAY);
+            dragButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/drag.png"))); // NOI18N
+            graphPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            dessiner=false;
+        }
+    
+    }//GEN-LAST:event_dragButtonActionPerformed
+
+    private void nonorientedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonorientedActionPerformed
+        // TODO add your handling code here:
+        resetFr();
+    }//GEN-LAST:event_nonorientedActionPerformed
+
+    private void orientedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orientedActionPerformed
+        // TODO add your handling code here:
+        resetFr();
+    }//GEN-LAST:event_orientedActionPerformed
+    
+    public void resetFr(){
+//        this.paint(this.getGraphics());
+//        Matrice.paint(Matrice.getGraphics());
+        PDF_RAPPORT="apport du graphe : \n";
+        details="";
+        for (int i = 0; i < sommets.size(); i++) {
+            Sommet get = sommets.get(i);
+            get.setPosition(-200, -200);
+        }
+        this.sommets.removeAllElements();
+        V=0;
+        this.Matrice.removeAll();
+        this.Matrice.setLayout(new GridLayout(V+1, V+1));
+        this.Matrice.repaint();
+        drawMatrix(V+1);
+        nbrV.setText(""+V);
+        graphPanel.removeAll();       
+        densiteProgress.setValue(0);
+        makeRapport();
+        
+        RemplirMatrix(V+1);
+    }
+    
+    private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed
+        // TODO add your handling code here
+        
+         // TODO add your handling code here:
+         if (evt.getSource() == ComboBox) {
+             JComboBox cb =(JComboBox) evt.getSource();
+             String msg = (String) cb.getSelectedItem(); 
+             JOptionPane jop1 = new JOptionPane();
+            switch(msg){
+//             String msg = (String)( ((JComboBox) evt.getSource()).getSelectedItem()); 
+//             switch(msg){
+                case "Choisir votre algorithme : " : ;break;
+                case "Prim":        String primString="";
+                                if(sommets.size()>0){
+                                if(nonoriented.isSelected()){
+                                    Prim prim=new Prim(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                                    primString+=prim.primMST();
+                                    if(primString.length()>0)
+                                        details+=primString;
+                                    else
+                                        jop1.showMessageDialog(null, "Le Graph n'est pas simple !", "Error", JOptionPane.WARNING_MESSAGE);
+                                }else
+                                  jop1.showMessageDialog(null, "il faut donner un Graph Non-orienté !", "Error", JOptionPane.ERROR_MESSAGE);
+                                }else
+                                    jop1.showMessageDialog(null, "il faut initialiser un Graph !", "Error", JOptionPane.ERROR_MESSAGE);
+                                ;break;
+                case "Kruskal":     try {
+                                        if(sommets.size()>0){
+                                            if(nonoriented.isSelected()){
+                                                Kruskal kruskal=new Kruskal(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                                                details+=kruskal.kruskalMST();
+                                            }else
+                                              jop1.showMessageDialog(null, "il faut donner un Graph Non-orienté !", "Error", JOptionPane.ERROR_MESSAGE);
+                                        }else
+                                            jop1.showMessageDialog(null, "il faut initialiser un Graph !", "Error", JOptionPane.ERROR_MESSAGE);
+                                    
+                                    } catch (Exception e) {
+                                        jop1.showMessageDialog(null, "Le Graph n'est pas simple !", "Error", JOptionPane.WARNING_MESSAGE);                                        
+                                    }
+                                    ;break;
+                case "Floyd–Warshall":   if(sommets.size()>0){
+                                            drawPanel();
+                                            FloydWarshall warshall=new FloydWarshall(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                                            details+=warshall.floydWarshall();
+                                        }else
+                                              jop1.showMessageDialog(null, "il faut initialiser un Graph !", "Error", JOptionPane.ERROR_MESSAGE);
+                                        ;break;
+                case "BFS":     if(sommets.size()>0){
+                                    drawPanel();
+                                    BFS bfs=new BFS(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                                    try{
+                                        int start=Integer.parseInt(JOptionPane.showInputDialog("Enter le sommet de départ :"));
+                                        if(1<=start && start<=V)
+                                        details+=bfs.bfs(start-1);
+                                    }catch(Exception e){                                        
+                                     jop1.showMessageDialog(null, "il faut donner le sommet de départ!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                }else
+                                    jop1.showMessageDialog(null, "il faut initialiser un Graph !", "Error", JOptionPane.ERROR_MESSAGE);
+                                ;break;
+                case "DFS":     if(sommets.size()>0){
+                                    drawPanel();
+                                    DFS dfs=new DFS(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                                    try{
+                                        int start=Integer.parseInt(JOptionPane.showInputDialog("Enter le sommet de départ :"));
+                                        if(1<=start && start<=V)
+                                        details+=dfs.dfs(start-1);
+                                    }catch(Exception e){                                        
+                                       jop1.showMessageDialog(null, "il faut donner le sommet de départ!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                }else
+                                    jop1.showMessageDialog(null, "il faut initialiser un Graph !", "Error", JOptionPane.ERROR_MESSAGE);
+                                ;break;
+                case "Dijikstra":   if(sommets.size()>0){
+                                        drawPanel();
+                                        Dijiktra dijikstra=new Dijiktra(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                                        try{
+                                        int start=Integer.parseInt(JOptionPane.showInputDialog("Enter le sommet de départ :"));
+                                        if(1<=start && start<=V)
+                                            details+=dijikstra.dijkstra(start-1);
+                                    }catch(Exception e){                                        
+                                       jop1.showMessageDialog(null, "il faut donner le sommet de départ!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                    }else
+                                          jop1.showMessageDialog(null, "il faut initialiser un Graph !", "Error", JOptionPane.ERROR_MESSAGE);
+                                    ;break;
+                case "Bellman–Ford":   if(sommets.size()>0){
+                                            if(oriented.isSelected()){
+                                                drawPanel();
+                                                BellmanFord bellmanFord=new BellmanFord(this,getMatrice(),V,E,sommets, (Graphics2D) getGraphPanel());
+                                                try{
+                                                    int start=Integer.parseInt(JOptionPane.showInputDialog("Enter le sommet de départ :"));
+                                                    if(1<=start && start<=V)
+                                                        details+=bellmanFord.graphSup.BellmanFord(start-1);
+                                                }catch(Exception e){                                        
+                                                   jop1.showMessageDialog(null, "il faut donner le sommet de départ!", "Error", JOptionPane.ERROR_MESSAGE);
+                                                }
+                                                
+                                            }else{
+                                                   jop1.showMessageDialog(null, "il faut que le graphe soit Orienté!", "Error", JOptionPane.ERROR_MESSAGE);
+                                                }
+                                        }else
+                                              jop1.showMessageDialog(null, "il faut initialiser un Graph !", "Error", JOptionPane.ERROR_MESSAGE);
+break;
+                case "Ford–Fulkerson":  if(sommets.size()>0){
+                                            if(oriented.isSelected()){
+                                                String fordFulkersonString="";
+                                                drawPanel();
+                                                FordFulkerson fordFulkerson=new FordFulkerson(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                                                try{
+                                                    int start=Integer.parseInt(JOptionPane.showInputDialog("Enter le sommet de départ :"));
+                                                    int end=Integer.parseInt(JOptionPane.showInputDialog("Enter le sommet de destination :"));
+                                                    Sommet endSommet=sommets.get(end-1);
+                                                    if(endSommet.voisins.size()==0){
+                                                        if(1<=start && start<=V && 1<=end && end<=V)
+                                                            fordFulkersonString+=fordFulkerson.fordFulkerson(start-1,end-1);
+                                                        if(fordFulkersonString.length()>0)
+                                                            details+=fordFulkersonString;
+                                                        else
+                                                          jop1.showMessageDialog(null, "Ce graphe n'est pas un graphe de transport !", "Error", JOptionPane.ERROR_MESSAGE);                                                
+                                                    }else
+                                                          jop1.showMessageDialog(null, "Ce sommet n'applique pas les règles nécessaire pour construire un graphe de transport !", "Error", JOptionPane.WARNING_MESSAGE);                                                
+                                                }catch(Exception e){
+                                                      jop1.showMessageDialog(null, "il faut donner les sommet des départ et destination !", "Error", JOptionPane.ERROR_MESSAGE);
+                                                }
+                                            }else
+                                                jop1.showMessageDialog(null, "il faut que le graphe soit Orienté!", "Error", JOptionPane.WARNING_MESSAGE);
+                                        }else 
+                                            jop1.showMessageDialog(null, "il faut initialiser un Graph !", "Error", JOptionPane.ERROR_MESSAGE);
+                                        ;break;                    
+                }
+            Details.setText(details);
+         }
+        
+        
+        
+    }//GEN-LAST:event_ComboBoxActionPerformed
+
+    private void Vider_detailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Vider_detailsActionPerformed
+        // TODO add your handling code here:
+        details="";
+        Details.setText(details);
+        drawPanel();
+//        DetailsPanel.paint(Details.getGraphics());
+//        DetailsPanel.updateUI();
+    }//GEN-LAST:event_Vider_detailsActionPerformed
+
+    private void ExportPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportPDFActionPerformed
+        // TODO add your handling code here:
+        String PDF_RAPPORT2="";
+        final String nomDOSSIER_PDF=new String("./PDFs/");
+        JOptionPane jop1=new JOptionPane();
+        if(this.V!=0){
+            Document document=new Document();
+            try {
+                Random random=new Random();
+                String titre="";
+                if (this.NOM_PROJET.length()>0) 
+                    titre=NOM_PROJET;
+                else 
+                    titre="File N°"+random.nextInt();
+                PdfWriter.getInstance(document, new FileOutputStream(nomDOSSIER_PDF+titre+".pdf"));
+                document.open();
+                //Ajouter Rapport
+                document.add(new Paragraph("Rapport du graphe\n\n"+PDF_RAPPORT));
+                
+                //Ajouter Image du MatAdj
+                Image imgMatAdj=Image.getInstance(getMatAdjImg(titre));
+                imgMatAdj.scaleToFit(320, 550);
+                document.add(new Paragraph("\n\nCaptures pour le rapport :\n"));
+                document.add(imgMatAdj);
+                
+                //Ajouter Image du graphe
+                Image imgGraphe=Image.getInstance(getGraphImg(titre));
+                imgGraphe.scaleToFit(280, 240);
+                document.add(imgGraphe);
+                                
+                isAlgorithme=true;  //Pour Recevoir les algorithmes sans dessin !!!!!!!!!
+        
+                //----------------------------Add Algorithmes--------------------------
+                PDF_RAPPORT2+="\n\nApplication des algorthmes\n";
+                DFS dfs=new DFS(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                BFS bfs=new BFS(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                FloydWarshall warshall=new FloydWarshall(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+
+                PDF_RAPPORT2+=bfs.bfs(0);
+                PDF_RAPPORT2+=dfs.dfs(0);
+                if(oriented.isSelected()){
+                    BellmanFord bellmanFord=new BellmanFord(this,getMatrice(),V,E,sommets, (Graphics2D) getGraphPanel());
+                    Dijiktra dijikstra=new Dijiktra(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                    PDF_RAPPORT2+=bellmanFord.graphSup.BellmanFord(0);
+                    PDF_RAPPORT2+=dijikstra.dijkstra(0);
+                }else{
+                    Kruskal kruskal=new Kruskal(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                    Prim prim=new Prim(this,getMatrice(),V,sommets, (Graphics2D) getGraphPanel());
+                    PDF_RAPPORT2+=prim.primMST();
+                    PDF_RAPPORT2+=kruskal.kruskalMST();
+                }
+                PDF_RAPPORT2+=warshall.floydWarshall();
+
+                //------------------------Add Historiquz des Algorithme-------------------------------
+                PDF_RAPPORT2+="\nHistorique des algorthmes\n";
+                if(details.length()>0)
+                    PDF_RAPPORT2+=details;
+                else
+                    PDF_RAPPORT2+="Historique est vide";
+                isAlgorithme=false;
+                
+                document.add(new Paragraph(PDF_RAPPORT2));
+                
+                document.close();
+                System.out.println("Innnnnn"+Application_PATH+"\\"+"PDFs"+"\\"+titre+".pdf");
+                Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler "+Application_PATH+"\\"+"PDFs"+"\\"+titre+".pdf");
+            } catch (FileNotFoundException ex) {
+                 jop1.showMessageDialog(null, "Error !"+ex, "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (DocumentException ex) {
+                  jop1.showMessageDialog(null, "Error !"+ex, "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException ex) {
+                   jop1.showMessageDialog(null, "Error!"+ex, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }else
+            jop1.showMessageDialog(null, "il faut initialiser un Graph !", "Error", JOptionPane.ERROR_MESSAGE);
+
+    }//GEN-LAST:event_ExportPDFActionPerformed
+
+    public boolean isIsAlgorithme() {
+        return isAlgorithme;
+    }
+
+    public void setIsAlgorithme(boolean isAlgorithme) {
+        this.isAlgorithme = isAlgorithme;
+    }
+    
+    String getGraphImg(String titre) throws IOException{
+        String iconPath="";
+        try {
+            Rectangle screenShot=new Rectangle(graphPanel.getX()+this.getX()+5, 
+                                            graphPanel.getY()+this.getY()+navPanel.getHeight()+4, 
+                                            graphPanel.getWidth(), 
+                                            graphPanel.getHeight());
+            BufferedImage capture=new Robot().createScreenCapture(screenShot);
+            ImageIO.write(capture, "png",new File("./PDFs/"+titre+"Graph"+".png"));
+            iconPath+="./PDFs/"+titre+"Graph"+".png";
+        } catch (AWTException ex) {
+            Logger.getLogger(TheorieDuGraphe.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return iconPath;
+    }
+    
+    String getMatAdjImg(String titre) throws IOException{
+        String iconPath="";
+        try {
+            Rectangle screenShot=new Rectangle(RapportGraphPanel.getX()+Tabs_Panel.getX()+Panel.getX()+this.getX()+8, 
+                                            jMenuBar.getHeight()+Tabs_Panel.getY()+TabsPanel.getY()+this.getY()+30, 
+                                            RapportGraphPanel.getWidth(), RapportGraphPanel.getHeight()-36);
+            BufferedImage capture=new Robot().createScreenCapture(screenShot);
+            ImageIO.write(capture, "png",new File("./PDFs/"+titre+"MatAdj"+".png"));
+            iconPath+="./PDFs/"+titre+"MatAdj"+".png";
+        } catch (AWTException ex) {
+            Logger.getLogger(TheorieDuGraphe.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return iconPath;
+    }
+    
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+        // TODO add your handling code here:
+        resetFr();
+    }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void sommetWITDHStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sommetWITDHStateChanged
+        // TODO add your handling code here:
+        Sommet.WIDTH=sommetWITDH.getValue();
+        repaint();
+        
+    }//GEN-LAST:event_sommetWITDHStateChanged
+
+    private void colorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorButtonActionPerformed
+        // TODO add your handling code here:
+        Color_Dialogue colorDialog=new Color_Dialogue(this, true);
+        colorDialog.setLocation(200, 200);
+        colorDialog.setVisible(true);
+        repaint();
+    }//GEN-LAST:event_colorButtonActionPerformed
+
+    private void pictButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pictButtonActionPerformed
+        // TODO add your handling code here:
+        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+        int returnValue = jfc.showOpenDialog(null);
+        // int returnValue = jfc.showSaveDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = jfc.getSelectedFile();
+            System.out.println(selectedFile.getAbsolutePath());
+            this.PATH=selectedFile.getAbsolutePath();
+        }
+        graphPanel.repaint();
+    }//GEN-LAST:event_pictButtonActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        CreerJDialog creerJDialog =new CreerJDialog(this, true);
+        creerJDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void graphPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_graphPanelMousePressed
+        try {
+            // TODO add your handling code here:
+            addToCtrZ();
+            System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzz"+ctrlZ.size());
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(TheorieDuGraphe.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_graphPanelMousePressed
+
+    private void graphPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_graphPanelMouseClicked
+        // TODO add your handling code here:
+        boolean exist=false;
+        for(int i=0;i<sommets.size();i++){
+            Sommet temp=sommets.get(i);
+            if(evt.getX()>temp.getX() && evt.getX()<temp.getX()+temp.WIDTH && evt.getY()>temp.getY() && evt.getY()<temp.getY()+temp.WIDTH ){
+                exist=true;
+                break;
+            }
+        }
+        if(!exist){
+            this.V=V+1;
+            nbrV.setText(""+V);
+            sommets.add(new Sommet(V, this));
+            int width=sommets.get(V-1).WIDTH;
+            sommets.get(V-1).setPosition(evt.getX()-width/2,evt.getY()-width/2);
+            RemplirMatrix(V+1);
+//            addToCtrZ();
+//            System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzz"+ctrlZ.size());
+        }
+        
+
+    }//GEN-LAST:event_graphPanelMouseClicked
+
+    private void graphPanelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_graphPanelMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_graphPanelMouseMoved
+
+    private void graphPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_graphPanelMouseDragged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_graphPanelMouseDragged
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        SauvJDialog sauvJDialog=new SauvJDialog(this, true);
+        sauvJDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        OuvrirJDialog ouvrirJDialog=new OuvrirJDialog(this, true);
+        ouvrirJDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        try {
+            // TODO add your handling code here:
+            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler "+"Theorie des graphes - Application ( Rapport ).pdf");
+        } catch (IOException ex) {
+            Logger.getLogger(TheorieDuGraphe.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        A_Propos a_Propos=new A_Propos(this, true);
+        a_Propos.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
+        // TODO add your handling code here:
+        back();
+    }//GEN-LAST:event_BackButtonActionPerformed
+
+    private void graphPanelPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_graphPanelPropertyChange
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_graphPanelPropertyChange
+
+    private void graphPanelComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_graphPanelComponentAdded
+
+    }//GEN-LAST:event_graphPanelComponentAdded
+
+    private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
+
+    }//GEN-LAST:event_jPanel1MousePressed
+
+    private void BackButtonKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BackButtonKeyTyped
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_BackButtonKeyTyped
+
+    private void PanelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PanelKeyPressed
+
+    }//GEN-LAST:event_PanelKeyPressed
+    
+   
+    
+    
+    private void graphPanelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_graphPanelKeyPressed
+        // TODO add your handling code here:
+        if ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0) 
+            System.out.println("wooooooooooooooooooooooot!");
+    }//GEN-LAST:event_graphPanelKeyPressed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+
+        // TODO add your handling code here:
+        back();
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void weightedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weightedActionPerformed
+        // TODO add your handling code here:
+        repaint();
+    }//GEN-LAST:event_weightedActionPerformed
+
+    private void nonweightedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonweightedActionPerformed
+        // TODO add your handling code here:
+        repaint();
+    }//GEN-LAST:event_nonweightedActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        E=0;
+        if(Integer.parseInt(nbrV.getText().toString())>0){
+            this.complet=true;
+            RemplirMatrix(V+1);            
+            this.jButtonCreerGraphActionPerformed(evt);
+        }
+        this.complet=false;
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void AddCoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddCoutButtonActionPerformed
+        // TODO add your handling code here:
+        String coutName=JOptionPane.showInputDialog("Entrer un nom pour les coûts :");
+        if(coutName!=null && !coutName.contains(" ")){
+            Sommet.COUT_NAME=coutName;
+            graphPanel.repaint();
+        }
+        if(coutName.contains(" "))
+            JOptionPane.showMessageDialog(this, "Il faut que le nom soit sans espaces :/ !!", "Warning", JOptionPane.WARNING_MESSAGE);
+    }//GEN-LAST:event_AddCoutButtonActionPerformed
+
+    private void AddCoutButtonFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_AddCoutButtonFocusGained
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_AddCoutButtonFocusGained
+
+    private void AddCoutButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddCoutButtonMouseEntered
+        // TODO add your handling code here:
+        AddCoutButton.setToolTipText("Ajouter un nom pour les coûts");
+    }//GEN-LAST:event_AddCoutButtonMouseEntered
+
+    private void BackButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackButtonMouseEntered
+        // TODO add your handling code here:
+        BackButton.setToolTipText("Annuler l'action");
+
+    }//GEN-LAST:event_BackButtonMouseEntered
+
+    private void resetButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetButtonMouseEntered
+        // TODO add your handling code here:
+        resetButton.setToolTipText("Recommencer");
+    }//GEN-LAST:event_resetButtonMouseEntered
+
+    private void dragButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dragButtonMouseEntered
+        // TODO add your handling code here:
+        if(this.dessiner)
+            dragButton.setToolTipText("Activer pour déplacer et supprimer les sommets");
+        else
+            dragButton.setToolTipText("Activer pour dessiner et nommer les sommets");
+    }//GEN-LAST:event_dragButtonMouseEntered
+
+    private void colorButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorButtonMouseEntered
+        // TODO add your handling code here:
+        colorButton.setToolTipText("Colorer l'interface graphique");
+    }//GEN-LAST:event_colorButtonMouseEntered
+
+    private void pictButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pictButtonMouseEntered
+        // TODO add your handling code here:
+        pictButton.setToolTipText("Telecharger une image");
+    }//GEN-LAST:event_pictButtonMouseEntered
+
+    public String getPath() {
+        return PATH;
+    }
+
+    public void setPath(String path) {
+        this.PATH = path;
+    }
+    
+    public boolean isWeighted(){
+        return weighted.isSelected();
+    }
+    
+    
+    public Graphics getGraphPanel()
+    {
+        return this.graphPanel.getGraphics();
+    }
+    
+    public JPanel getPanel() {
+        return this.graphPanel;
+    }
+    
+    public boolean isDessiner() {
+        return this.dessiner;
+    }
+    public boolean isAlgorithme() {
+        return this.isAlgorithme;
+    }
+    
+    public boolean isOriented() {
+        return this.oriented.isSelected();
+    }
+    
+    public void setE(int x) {
+        this.E+=x;
+    }
+    
+    void setOrinted(boolean b) {
+        oriented.setSelected(b);
+    }
+    
+    
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(TheorieDuGraphe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(TheorieDuGraphe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(TheorieDuGraphe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(TheorieDuGraphe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TheorieDuGraphe().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddCoutButton;
+    private javax.swing.JButton BackButton;
+    private javax.swing.JComboBox<String> ComboBox;
+    private javax.swing.JTextPane Details;
+    private javax.swing.JPanel DetailsPanel;
+    private javax.swing.JButton ExportPDF;
+    private javax.swing.JLabel Lab1;
+    private javax.swing.JLabel Lab10;
+    private javax.swing.JLabel Lab11;
+    private javax.swing.JLabel Lab12;
+    private javax.swing.JLabel Lab13;
+    private javax.swing.JLabel Lab14;
+    private javax.swing.JLabel Lab2;
+    private javax.swing.JLabel Lab3;
+    private javax.swing.JLabel Lab4;
+    private javax.swing.JLabel Lab5;
+    private javax.swing.JLabel Lab6;
+    private javax.swing.JLabel Lab7;
+    private javax.swing.JLabel Lab8;
+    private javax.swing.JLabel Lab9;
+    private javax.swing.JPanel Matrice;
+    private javax.swing.JLabel PROJET_TITRE;
+    private javax.swing.JPanel Panel;
+    private javax.swing.JPanel RapportGraphPanel;
+    private javax.swing.JPanel TabsPanel;
+    private javax.swing.JTabbedPane Tabs_Panel;
+    private javax.swing.JButton Vider_details;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton colorButton;
+    private javax.swing.JLabel densite;
+    private javax.swing.JLabel densiteCompleted;
+    private javax.swing.JProgressBar densiteProgress;
+    private javax.swing.JDialog dialog;
+    private javax.swing.JLabel diametre;
+    private javax.swing.JToggleButton dragButton;
+    public javax.swing.JPanel graphPanel;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonCreerGraph;
+    private javax.swing.JColorChooser jColorChooser1;
+    private javax.swing.JColorChooser jColorChooser2;
+    private javax.swing.JColorChooser jColorChooser3;
+    private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JPanel matAdjPanel;
+    private javax.swing.JPanel navPanel;
+    private javax.swing.JLabel nbrE;
+    private javax.swing.JTextField nbrV;
+    private javax.swing.JRadioButton nonoriented;
+    private javax.swing.JRadioButton nonweighted;
+    private javax.swing.JLabel ordre;
+    private javax.swing.JRadioButton oriented;
+    private javax.swing.JButton pictButton;
+    private javax.swing.JButton resetButton;
+    private javax.swing.JSlider sommetWITDH;
+    private javax.swing.JLabel taille;
+    private javax.swing.JLabel type;
+    private javax.swing.JLabel typeGraphe;
+    private javax.swing.JRadioButton weighted;
+    // End of variables declaration//GEN-END:variables
+
+    void setNbrV(int V) {
+        nbrV.setText(""+V);
+        RemplirMatrix(V+1);
+    }
+    public void setV(int i){
+        V+=i;
+    }
+    
+    public int getV() {
+        return V;
+    }
+    
+    public int getE() {
+        return E;
+    }
+
+    JLabel getNbrE() {
+        return this.nbrE;
+    }
+    
+    public Vector<Sommet> getSommets(){
+        return sommets;
+    }
+
+    public JTextField getNbrV() {
+        return nbrV;
+    }
+
+    public void setNbrV(JTextField nbrV) {
+        this.nbrV = nbrV;
+    }
+    
+    
+    
+    public void setFr(Vector sauvVector){
+        PROJET_TITRE.setForeground(Color.BLUE);
+        PROJET_TITRE.setText(NOM_PROJET);
+        
+        this.sommets=(Vector<Sommet>) sauvVector.get(2);
+        for (int i = 0; i < sommets.size(); i++) {
+            Sommet get = sommets.get(i);
+            get.setFr(this);
+        }
+        System.out.println("Sommet Size : "+sommets.size());
+        Vector colors=(Vector) sauvVector.get(3);
+        Sommet.sommetCOLOR=(Color) colors.get(0);
+        Sommet.indiceCOLOR=(Color) colors.get(1);
+        Sommet.arcCOLOR=(Color) colors.get(2);
+        Sommet.indiceArcCOLOR=(Color) colors.get(3);
+        
+        Sommet.WIDTH=(int) sauvVector.get(4);
+        Sommet.COUT_NAME=(String) sauvVector.get(5);
+        
+        this.PATH=(String) sauvVector.get(6);            
+        
+        this.details=(String) sauvVector.get(1);
+        Details.setText(details);
+        
+        this.V=sommets.size();
+        if( ( (boolean) sauvVector.get(0))==true)
+            this.oriented.setSelected(true);
+        else
+            this.nonoriented.setSelected(true);
+        RemplirMatrix(V+1);
+        nbrV.setText(""+V);
+//        this.CreerGraphActionPerformed();
+    }
+         
+     public void back(){
+             resetFr();
+    //        ctrlZ.remove(ctrlZ.size()-1);
+    //        ctrlZ.remove(ctrlZ.size()-1);
+            if(ctrlZ.size()!=0){
+//                Vector temp = (Vector) ctrlZ.get(ctrlZ.size()-1).clone();
+                Vector temp = (Vector) ctrlZ.get(ctrlZ.size()-1);
+                setFr(temp);       
+                System.out.println("Sommetsizezzzzzzzzzzzzz"+((Vector)temp.get(2)).size());
+//                Vector tempVector=ctrlZ.get(ctrlZ.size()-1);
+                for (int i = 0; i < ((Vector)temp.get(2)).size(); i++) {
+                    Sommet tmp = (Sommet) ((Vector)temp.get(2)).get(i);
+                    tmp.voisins.removeAllElements();
+                }
+                ctrlZ.remove(ctrlZ.size()-1);
+                System.out.println("--------zzzzzzzzzzzzz"+ctrlZ.size());
+            }
+            if(NOM_PROJET.length()==0){
+                PROJET_TITRE.setText("Aucune !");
+                PROJET_TITRE.setForeground(Color.red);
+            }
+            this.jButtonCreerGraph.doClick();
+    }
+     
+    public void addToCtrZ() throws CloneNotSupportedException{
+        if(sommets.size()>0){
+            //1. Orientation
+            //2. details
+            //3. sommets
+            //4. colors
+            //5. WIDTH
+            //6. PATH
+            Vector temp=new Vector();
+            temp.add(isOriented());
+            temp.add(details);
+            Vector tempSommets=new Vector();
+            for (int i = 0; i < sommets.size(); i++) {
+                tempSommets.add(sommets.get(i).clone());
+//                tempSommets.add(sommets.get(i));
+            }
+
+            temp.add(tempSommets);
+            System.out.println("Add Sommets size : "+tempSommets.size());
+
+            Vector tempColors=new Vector();
+            tempColors.add(Sommet.sommetCOLOR);
+            tempColors.add(Sommet.indiceCOLOR);
+            tempColors.add(Sommet.arcCOLOR);
+            tempColors.add(Sommet.indiceArcCOLOR);
+
+            temp.add(tempColors);
+            temp.add(Sommet.WIDTH);
+            temp.add(Sommet.COUT_NAME);
+            temp.add(PATH);
+
+            this.ctrlZ.add(temp);
+            System.out.println("ctrlZ added+1 : "+ctrlZ.size());
+        }
+    }
+    
+//    public void back(){
+//        try{
+//            sommets=ctrlZ.get(ctrlZ.size()-1);
+//            V=sommets.size();
+//            nbrV.setText(""+V);
+//            Vector temp=ctrlZ.get((ctrlZ.size()-1));
+////            for (int i = 0; i < temp.size(); i++) {
+////                ( (Sommet) temp.elementAt(i)).setGraphics(null);
+////                ( (Sommet) temp.elementAt(i)).setFr(null);
+////            }
+////            for (int i = 0; i < sommets.size(); i++) {
+////                ( (Sommet) sommets.elementAt(i)).setGraphics(getGraphPanel());
+////                ( (Sommet) sommets.elementAt(i)).setFr(this);
+////            }
+//            ctrlZ.removeElementAt(ctrlZ.size()-1);
+//            System.out.println("Size ctrlZ : "+(ctrlZ.size()));
+//            System.out.println("Size V : "+V);
+//
+////            resetFr();
+//            RemplirMatrix(V+1);
+//            this.jButtonCreerGraph.setEnabled(true);
+////            ctrlZ.removeElementAt(ctrlZ.size()-2);
+//            ctrlZ.removeElementAt(ctrlZ.size()-1);
+//        }catch(Exception e){
+//            System.err.println("Size ctrlZ : "+(ctrlZ.size()));
+//            System.err.println("Size V : "+V);
+//            throw e;
+//        }
+//    }
+
+    public String details() {
+        return this.details;
+    }
+
+    public void setTITRE_PROJET() {
+        this.PROJET_TITRE.setText(TheorieDuGraphe.NOM_PROJET);
+        this.PROJET_TITRE.setForeground(Color.BLUE);
+    }
+
+    public JPanel getNavPanel() {
+        return this.navPanel;
+    }
+    
+}
